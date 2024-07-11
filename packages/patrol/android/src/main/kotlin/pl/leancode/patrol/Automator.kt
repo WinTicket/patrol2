@@ -4,9 +4,11 @@ import android.app.Instrumentation
 import android.app.UiAutomation
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
+import android.provider.Settings
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
 import android.widget.EditText
@@ -28,6 +30,7 @@ import pl.leancode.patrol.contracts.Contracts.Point2D
 import pl.leancode.patrol.contracts.Contracts.Rectangle
 import pl.leancode.patrol.contracts.Contracts.Selector
 import kotlin.math.roundToInt
+
 
 private fun fromUiObject2(obj: UiObject2): NativeView {
     return NativeView(
@@ -193,6 +196,39 @@ class Automator private constructor() {
     fun enableBluetooth(): Unit = throw NotImplementedError("enableBluetooth")
 
     fun disableBluetooth(): Unit = throw NotImplementedError("disableBluetooth")
+    
+    fun enableLocation() {
+        val enabled = isLocationEnabled()
+        if(enabled) {
+            Logger.d("Location already enabled")
+            return
+        } else {
+            toggleLocation()
+        }
+    }
+
+    fun disableLocation() {
+        val enabled = isLocationEnabled()
+        if(!enabled) {
+            Logger.d("Location already disabled")
+            return
+        } else {
+            toggleLocation()
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // This is a new method provided in API 28
+            val lm = targetContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            lm.isLocationEnabled
+        } else {
+            // This was deprecated in API 28
+            val mode = Settings.Secure.getInt(targetContext.contentResolver, Settings.Secure.LOCATION_MODE,
+                Settings.Secure.LOCATION_MODE_OFF)
+            mode != Settings.Secure.LOCATION_MODE_OFF
+        }
+    }
 
     fun getNativeViews(selector: BySelector): List<NativeView> {
         Logger.d("getNativeViews()")
@@ -658,6 +694,23 @@ class Automator private constructor() {
         }
 
         return null
+    }
+
+    private fun toggleLocation() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        targetContext.startActivity(intent)
+
+        var uiSelector = UiSelector()
+        uiSelector = uiSelector.text("Use location")
+        val uiObject = uiDevice.findObject(uiSelector)
+        if(uiObject != null) {
+            uiObject.click()
+            pressBack()
+            delay()
+        } else {
+            throw PatrolException("Could not find location toggle")
+        }
     }
 
     companion object {
