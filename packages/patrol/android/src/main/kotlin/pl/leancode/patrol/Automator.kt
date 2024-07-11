@@ -31,7 +31,6 @@ import pl.leancode.patrol.contracts.Contracts.Rectangle
 import pl.leancode.patrol.contracts.Contracts.Selector
 import kotlin.math.roundToInt
 
-
 private fun fromUiObject2(obj: UiObject2): NativeView {
     return NativeView(
         className = obj.className,
@@ -196,10 +195,10 @@ class Automator private constructor() {
     fun enableBluetooth(): Unit = throw NotImplementedError("enableBluetooth")
 
     fun disableBluetooth(): Unit = throw NotImplementedError("disableBluetooth")
-    
+
     fun enableLocation() {
         val enabled = isLocationEnabled()
-        if(enabled) {
+        if (enabled) {
             Logger.d("Location already enabled")
             return
         } else {
@@ -209,7 +208,7 @@ class Automator private constructor() {
 
     fun disableLocation() {
         val enabled = isLocationEnabled()
-        if(!enabled) {
+        if (!enabled) {
             Logger.d("Location already disabled")
             return
         } else {
@@ -224,8 +223,11 @@ class Automator private constructor() {
             lm.isLocationEnabled
         } else {
             // This was deprecated in API 28
-            val mode = Settings.Secure.getInt(targetContext.contentResolver, Settings.Secure.LOCATION_MODE,
-                Settings.Secure.LOCATION_MODE_OFF)
+            val mode = Settings.Secure.getInt(
+                targetContext.contentResolver,
+                Settings.Secure.LOCATION_MODE,
+                Settings.Secure.LOCATION_MODE_OFF
+            )
             mode != Settings.Secure.LOCATION_MODE_OFF
         }
     }
@@ -704,7 +706,7 @@ class Automator private constructor() {
         var uiSelector = UiSelector()
         uiSelector = uiSelector.text("Use location")
         val uiObject = uiDevice.findObject(uiSelector)
-        if(uiObject != null) {
+        if (uiObject != null) {
             uiObject.click()
             pressBack()
             delay()
