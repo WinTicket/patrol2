@@ -1,3 +1,7 @@
+## Unreleased
+
+- Implement `enableLocation` and `disableLocation` methods for Android. (#2259)
+
 ## 3.9.0
 
 - Add privacy manifest for Apple.
