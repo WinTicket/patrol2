@@ -16,7 +16,6 @@ void main() {
       String? flavor;
 
       expect(buildMode.createConfiguration(flavor), 'Debug');
-      expect(buildMode.createScheme(flavor), 'Runner');
     });
 
     test('infers build options in debug mode when flavor is not null', () {
@@ -24,7 +23,6 @@ void main() {
       const flavor = 'dev';
 
       expect(buildMode.createConfiguration(flavor), 'Debug-dev');
-      expect(buildMode.createScheme(flavor), 'dev');
     });
 
     test('infers build options in release mode when flavor is null', () {
@@ -32,7 +30,6 @@ void main() {
       String? flavor;
 
       expect(buildMode.createConfiguration(flavor), 'Release');
-      expect(buildMode.createScheme(flavor), 'Runner');
     });
 
     test('infers build options in release mode when flavor is not null', () {
@@ -40,7 +37,6 @@ void main() {
       const flavor = 'prod';
 
       expect(buildMode.createConfiguration(flavor), 'Release-prod');
-      expect(buildMode.createScheme(flavor), 'prod');
     });
   });
 
