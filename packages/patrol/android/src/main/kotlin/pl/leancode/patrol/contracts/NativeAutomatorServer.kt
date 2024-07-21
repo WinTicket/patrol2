@@ -21,6 +21,7 @@ abstract class NativeAutomatorServer {
     abstract fun doublePressRecentApps()
     abstract fun openApp(request: Contracts.OpenAppRequest)
     abstract fun openQuickSettings(request: Contracts.OpenQuickSettingsRequest)
+    abstract fun openUrl(request: Contracts.OpenUrlRequest)
     abstract fun getNativeUITree(request: Contracts.GetNativeUITreeRequest): Contracts.GetNativeUITreeRespone
     abstract fun getNativeViews(request: Contracts.GetNativeViewsRequest): Contracts.GetNativeViewsResponse
     abstract fun tap(request: Contracts.TapRequest)
@@ -29,6 +30,8 @@ abstract class NativeAutomatorServer {
     abstract fun enterText(request: Contracts.EnterTextRequest)
     abstract fun swipe(request: Contracts.SwipeRequest)
     abstract fun waitUntilVisible(request: Contracts.WaitUntilVisibleRequest)
+    abstract fun pressVolumeUp()
+    abstract fun pressVolumeDown()
     abstract fun enableAirplaneMode()
     abstract fun disableAirplaneMode()
     abstract fun enableWiFi()
@@ -86,6 +89,11 @@ abstract class NativeAutomatorServer {
         openQuickSettings(body)
         Response(OK)
       },
+      "openUrl" bind POST to {
+        val body = json.fromJson(it.bodyString(), Contracts.OpenUrlRequest::class.java)
+        openUrl(body)
+        Response(OK)
+      },
       "getNativeUITree" bind POST to {
         val body = json.fromJson(it.bodyString(), Contracts.GetNativeUITreeRequest::class.java)
         val response = getNativeUITree(body)
@@ -124,6 +132,14 @@ abstract class NativeAutomatorServer {
       "waitUntilVisible" bind POST to {
         val body = json.fromJson(it.bodyString(), Contracts.WaitUntilVisibleRequest::class.java)
         waitUntilVisible(body)
+        Response(OK)
+      },
+      "pressVolumeUp" bind POST to {
+        pressVolumeUp()
+        Response(OK)
+      },
+      "pressVolumeDown" bind POST to {
+        pressVolumeDown()
         Response(OK)
       },
       "enableAirplaneMode" bind POST to {

@@ -14,6 +14,7 @@ protocol NativeAutomatorServer {
     func doublePressRecentApps() throws
     func openApp(request: OpenAppRequest) throws
     func openQuickSettings(request: OpenQuickSettingsRequest) throws
+    func openUrl(request: OpenUrlRequest) throws
     func getNativeUITree(request: GetNativeUITreeRequest) throws -> GetNativeUITreeRespone
     func getNativeViews(request: GetNativeViewsRequest) throws -> GetNativeViewsResponse
     func tap(request: TapRequest) throws
@@ -22,6 +23,8 @@ protocol NativeAutomatorServer {
     func enterText(request: EnterTextRequest) throws
     func swipe(request: SwipeRequest) throws
     func waitUntilVisible(request: WaitUntilVisibleRequest) throws
+    func pressVolumeUp() throws
+    func pressVolumeDown() throws
     func enableAirplaneMode() throws
     func disableAirplaneMode() throws
     func enableWiFi() throws
@@ -88,6 +91,12 @@ extension NativeAutomatorServer {
         return HTTPResponse(.ok)
     }
 
+    private func openUrlHandler(request: HTTPRequest) throws -> HTTPResponse {
+        let requestArg = try JSONDecoder().decode(OpenUrlRequest.self, from: request.body)
+        try openUrl(request: requestArg)
+        return HTTPResponse(.ok)
+    }
+
     private func getNativeUITreeHandler(request: HTTPRequest) throws -> HTTPResponse {
         let requestArg = try JSONDecoder().decode(GetNativeUITreeRequest.self, from: request.body)
         let response = try getNativeUITree(request: requestArg)
@@ -135,6 +144,16 @@ extension NativeAutomatorServer {
     private func waitUntilVisibleHandler(request: HTTPRequest) throws -> HTTPResponse {
         let requestArg = try JSONDecoder().decode(WaitUntilVisibleRequest.self, from: request.body)
         try waitUntilVisible(request: requestArg)
+        return HTTPResponse(.ok)
+    }
+
+    private func pressVolumeUpHandler(request: HTTPRequest) throws -> HTTPResponse {
+        try pressVolumeUp()
+        return HTTPResponse(.ok)
+    }
+
+    private func pressVolumeDownHandler(request: HTTPRequest) throws -> HTTPResponse {
+        try pressVolumeDown()
         return HTTPResponse(.ok)
     }
 
@@ -290,6 +309,11 @@ extension NativeAutomatorServer {
                 request: request,
                 handler: openQuickSettingsHandler)
         }
+        server.route(.POST, "openUrl") {
+            request in handleRequest(
+                request: request,
+                handler: openUrlHandler)
+        }
         server.route(.POST, "getNativeUITree") {
             request in handleRequest(
                 request: request,
@@ -329,6 +353,16 @@ extension NativeAutomatorServer {
             request in handleRequest(
                 request: request,
                 handler: waitUntilVisibleHandler)
+        }
+        server.route(.POST, "pressVolumeUp") {
+            request in handleRequest(
+                request: request,
+                handler: pressVolumeUpHandler)
+        }
+        server.route(.POST, "pressVolumeDown") {
+            request in handleRequest(
+                request: request,
+                handler: pressVolumeDownHandler)
         }
         server.route(.POST, "enableAirplaneMode") {
             request in handleRequest(

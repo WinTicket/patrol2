@@ -3,8 +3,12 @@ package pl.leancode.patrol
 import android.app.Instrumentation
 import android.app.UiAutomation
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
+import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
+import android.view.KeyEvent.KEYCODE_VOLUME_UP
 import android.widget.EditText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -131,6 +135,15 @@ class Automator private constructor() {
             ?: throw Exception("intent for launching package \"$packageName\" is null. Make sure you have android.permission.QUERY_ALL_PACKAGES in AndroidManifest.xml")
         // intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK) // clear out any previous task, i.e., make sure it starts on the initial screen
         targetContext.startActivity(intent) // starts the app
+        delay()
+    }
+
+    fun openUrl(urlString: String) {
+        Logger.d("openUrl($urlString)")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        targetContext.startActivity(intent)
         delay()
     }
 
@@ -370,6 +383,24 @@ class Automator private constructor() {
         if (waitForView(bySelector, index, timeout) == null) {
             throw UiObjectNotFoundException("$uiSelector")
         }
+    }
+
+    fun pressVolumeUp() {
+        Logger.d("pressVolumeUp")
+        val success = uiDevice.pressKeyCode(KEYCODE_VOLUME_UP)
+        if (!success) {
+            throw PatrolException("Could not press volume up")
+        }
+        delay()
+    }
+
+    fun pressVolumeDown() {
+        Logger.d("pressVolumeDown")
+        val success = uiDevice.pressKeyCode(KEYCODE_VOLUME_DOWN)
+        if (!success) {
+            throw PatrolException("Could not press volume down")
+        }
+        delay()
     }
 
     fun openNotifications() {

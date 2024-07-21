@@ -56,6 +56,12 @@
       }
     }
 
+    func openUrl(request: OpenUrlRequest) throws {
+      return try runCatching {
+        try automator.openUrl(request.url)
+      }
+    }
+
     // MARK: General UI interaction
 
     func getNativeViews(
@@ -199,6 +205,19 @@
         } else {
           throw PatrolError.internal("waitUntilVisible(): neither selector nor iosSelector are set")
         }
+      }
+    }
+
+    // MARK: Volume settings
+    func pressVolumeUp() throws {
+      return try runCatching {
+        try automator.pressVolumeUp()
+      }
+    }
+
+    func pressVolumeDown() throws {
+      return try runCatching {
+        try automator.pressVolumeDown()
       }
     }
 

@@ -1,3 +1,25 @@
+## 3.9.0
+
+- Add privacy manifest for Apple.
+- Disabled use of system proxy in iOS/macOS (could lead to broken tests).
+- Fix complete breakage of MacOS automations introduced in #2219.
+
+## 3.8.0
+
+- Add `openUrl(String url)` method, for testing deeplinks. (#2219) 
+- Add `pressVolumeUp` and `pressVolumeDown()`. (#2223)
+
+## 3.7.3
+
+- Try closing system dialog when disabling wifi on iOS. (#2123)
+
+## 3.7.2
+
+- Bump `test_api` dependency to 0.7.0.
+- Bump `patrol_devtools_extension` dependencies.
+- Bump min Flutter SDK to 3.22
+
+
 ## 3.7.1
 
 - Revert: Bump `patrol_devtools_extension` dependencies.

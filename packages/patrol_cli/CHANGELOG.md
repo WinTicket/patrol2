@@ -1,3 +1,19 @@
+## 3.0.1
+
+- Fallback to read `java` version from `JAVA_HOME` when `flutter doctor` doesn't print any.
+
+## 3.0.0
+
+- **Breaking:** Use `java` version from `flutter doctor`
+
+## 2.8.1
+
+- Fix parsing non string values from --dart-define-from-file (#2243).
+
+## 2.8.0
+
+- Add support for --dart-define-from-file (#2232).
+
 ## 2.7.0
 
 - Add support for custom flutter commands (#2124).

@@ -357,6 +357,14 @@ class NativeAutomator {
     );
   }
 
+  /// Opens the URL specified by [url].
+  Future<void> openUrl(String url) async {
+    await _wrapRequest(
+      'openUrl',
+      () => _client.openUrl(OpenUrlRequest(url: url)),
+    );
+  }
+
   /// Returns the first, topmost visible notification.
   ///
   /// Notification shade has to be opened with [openNotifications].
@@ -450,6 +458,36 @@ class NativeAutomator {
         ),
       ),
     );
+  }
+
+  /// Press volume up
+  ///
+  /// Doesn't work on iOS Simulator because Volume buttons are not available
+  /// there.
+  ///
+  /// See also:
+  ///  * <https://developer.android.com/reference/androidx/test/uiautomator/UiDevice#pressKeyCodes(int[])>,
+  ///    which is used on Android
+  ///
+  /// * <https://developer.apple.com/documentation/xctest/xcuidevice/button/volumeup>,
+  ///   which is used on iOS
+  Future<void> pressVolumeUp() async {
+    await _wrapRequest('pressVolumeUp', _client.pressVolumeUp);
+  }
+
+  /// Press volume down
+  ///
+  /// Doesn't work on iOS Simulator because Volume buttons are not available
+  /// there.
+  ///
+  /// See also:
+  ///  * <https://developer.android.com/reference/androidx/test/uiautomator/UiDevice#pressKeyCodes(int[])>,
+  ///    which is used on Android
+  ///
+  /// * <https://developer.apple.com/documentation/xctest/xcuidevice/button/volumedown>,
+  ///   which is used on iOS
+  Future<void> pressVolumeDown() async {
+    await _wrapRequest('pressVolumeDown', _client.pressVolumeDown);
   }
 
   /// Enables dark mode.

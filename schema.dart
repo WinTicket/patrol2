@@ -49,6 +49,10 @@ class OpenAppRequest {
 
 class OpenQuickSettingsRequest {}
 
+class OpenUrlRequest {
+  late String url;
+}
+
 class AndroidSelector {
   String? className;
   bool? isCheckable;
@@ -294,15 +298,16 @@ abstract class NativeAutomator<IOSServer, AndroidServer, DartClient> {
   void initialize();
   void configure(ConfigureRequest request);
 
-// general
+  // general
   void pressHome();
   void pressBack();
   void pressRecentApps();
   void doublePressRecentApps();
   void openApp(OpenAppRequest request);
   void openQuickSettings(OpenQuickSettingsRequest request);
+  void openUrl(OpenUrlRequest request);
 
-// general UI interaction
+  // general UI interaction
   GetNativeUITreeRespone getNativeUITree(GetNativeUITreeRequest request);
   GetNativeViewsResponse getNativeViews(GetNativeViewsRequest request);
   void tap(TapRequest request);
@@ -312,7 +317,11 @@ abstract class NativeAutomator<IOSServer, AndroidServer, DartClient> {
   void swipe(SwipeRequest request);
   void waitUntilVisible(WaitUntilVisibleRequest request);
 
-// services
+  // volume settings
+  void pressVolumeUp();
+  void pressVolumeDown();
+
+  // services
   void enableAirplaneMode();
   void disableAirplaneMode();
   void enableWiFi();
@@ -324,23 +333,23 @@ abstract class NativeAutomator<IOSServer, AndroidServer, DartClient> {
   void enableDarkMode(DarkModeRequest request);
   void disableDarkMode(DarkModeRequest request);
 
-// notifications
+  // notifications
   void openNotifications();
   void closeNotifications();
   void closeHeadsUpNotification();
   GetNotificationsResponse getNotifications(GetNotificationsRequest request);
   void tapOnNotification(TapOnNotificationRequest request);
 
-// permissions
+  // permissions
   PermissionDialogVisibleResponse isPermissionDialogVisible(
       PermissionDialogVisibleRequest request);
   void handlePermissionDialog(HandlePermissionRequest request);
   void setLocationAccuracy(SetLocationAccuracyRequest request);
 
-// other
+  // other
   void debug();
 
-// TODO(bartekpacia): Move this RPC into a new PatrolNativeTestService service because it doesn't fit here
+  // TODO(bartekpacia): Move this RPC into a new PatrolNativeTestService service because it doesn't fit here
   void markPatrolAppServiceReady();
 }
 

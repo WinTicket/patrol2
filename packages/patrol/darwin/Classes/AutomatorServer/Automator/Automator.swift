@@ -186,6 +186,7 @@ extension Selector {
     func openApp(_ bundleId: String) throws
     func openAppSwitcher() throws
     func openControlCenter() throws
+    func openUrl(_ url: String) throws
 
     // MARK: General UI interaction
     func tap(
@@ -241,6 +242,10 @@ extension Selector {
       inApp bundleId: String,
       withTimeout timeout: TimeInterval?
     ) throws
+
+    // MARK: Volume settings
+    func pressVolumeUp() throws
+    func pressVolumeDown() throws
 
     // MARK: Services
     func enableDarkMode(_ bundleId: String) throws

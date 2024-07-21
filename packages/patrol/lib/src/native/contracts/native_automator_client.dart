@@ -96,6 +96,15 @@ class NativeAutomatorClient {
     );
   }
 
+  Future<void> openUrl(
+    OpenUrlRequest request,
+  ) {
+    return _sendRequest(
+      'openUrl',
+      request.toJson(),
+    );
+  }
+
   Future<GetNativeUITreeRespone> getNativeUITree(
     GetNativeUITreeRequest request,
   ) async {
@@ -167,6 +176,18 @@ class NativeAutomatorClient {
     return _sendRequest(
       'waitUntilVisible',
       request.toJson(),
+    );
+  }
+
+  Future<void> pressVolumeUp() {
+    return _sendRequest(
+      'pressVolumeUp',
+    );
+  }
+
+  Future<void> pressVolumeDown() {
+    return _sendRequest(
+      'pressVolumeDown',
     );
   }
 

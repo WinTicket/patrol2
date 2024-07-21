@@ -16,6 +16,10 @@
       return XCUIApplication(bundleIdentifier: "com.apple.Preferences")
     }()
 
+    private lazy var system: XCUISystem = {
+      return device.system
+    }()
+
     private var timeout: TimeInterval = 10
 
     func configure(timeout: TimeInterval) {
@@ -50,6 +54,16 @@
     func openControlCenter() throws {
       runAction("opening control center") {
         self.swipeToOpenControlCenter()
+      }
+    }
+
+    func openUrl(_ urlString: String) throws {
+      guard let url = URL(string: urlString) else {
+        throw PatrolError.internal("Invalid URL string: \(urlString)")
+      }
+
+      runAction("opening url \(url)") {
+        self.system.open(url)
       }
     }
 
@@ -346,6 +360,23 @@
       }
     }
 
+    // MARK: Volume settings
+    func pressVolumeUp() throws {
+      #if targetEnvironment(simulator)
+        throw PatrolError.methodNotAvailable("pressVolumeUp", "simulator")
+      #else
+        self.device.press(XCUIDevice.Button.volumeUp)
+      #endif
+    }
+
+    func pressVolumeDown() throws {
+      #if targetEnvironment(simulator)
+        throw PatrolError.methodNotAvailable("pressVolumeDown", "simulator")
+      #else
+        self.device.press(XCUIDevice.Button.volumeDown)
+      #endif
+    }
+
     // MARK: Services
 
     func enableDarkMode(_ bundleId: String) throws {
@@ -466,6 +497,8 @@
 
         if toggle.value! as! String == "1" {
           toggle.tap()
+          // Disabling wifi can cause a system alert to appear
+          try self.acceptSystemAlertIfVisible()
         } else {
           Logger.shared.i("wifi is already disabled")
         }
