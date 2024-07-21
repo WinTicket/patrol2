@@ -35,7 +35,10 @@ enum BuildMode {
   String get androidName => xcodeName;
 
   String createScheme(String? flavor) {
-    return _defaultScheme;
+    if (flavor == null) {
+      return _defaultScheme;
+    }
+    return flavor[0].toUpperCase() + flavor.substring(1);
   }
 
   String createConfiguration(String? flavor) {
